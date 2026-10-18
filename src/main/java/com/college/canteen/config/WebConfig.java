@@ -1,3 +1,4 @@
+
 package com.college.canteen.config;
 
 import com.college.canteen.security.AdminAuthInterceptor;
@@ -15,7 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
         this.adminAuthInterceptor = adminAuthInterceptor;
     }
 
-    // everything under /api/admin needs admin login, except the login itself
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminAuthInterceptor)
@@ -23,11 +23,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/admin/login");
     }
 
-    // lets the React app (running on another port) call this backend
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173", "http://localhost:3000")
+                .allowedOrigins(
+                        "http://localhost:5173",
+                        "http://localhost:3000",
+                        "https://canteen-frontend-seven-sooty.vercel.app"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
